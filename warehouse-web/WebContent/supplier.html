@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Supplier View</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script
+	src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.8/angular.min.js"></script>
+<script data-language="javascript" type="text/javascript">
+	var app = angular.module('app1', []);
+	app.controller('ctrl1', function($scope, $http) {
+		$scope.getAllButton = function() {
+			$http.get('supplier').success(function(response) {
+				$scope.items = response;
+			});
+		}
+		$scope.searchButton = function(name) {
+			$http.get("supplier?name=" + name).success(function(response) {
+				$scope.items = response;
+			});
+		}
+	});
+</script>
+</head>
+<body data-ng-app="app1">
+	<div data-ng-controller="ctrl1">
+		<input type="text" placeholder="enter name" data-ng-model="name" />
+		<button data-ng-click="searchButton(name)">Search</button>
+		<button data-ng-click="getAllButton()">Show All</button>
+		<table border="1">
+			<thead>
+				<tr>
+					<th>Id</th>
+					<th>Name</th>
+					<th>Quantity</th>
+					<th>Price</th>
+					<th>SupplierId</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr data-ng-repeat="item in items">
+					<td>{{item.id}}</td>
+					<td>{{item.name}}</td>
+					<td>{{item.quantity}}</td>
+					<td>{{item.price}}</td>
+					<td>{{item.supplierId}}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+</body>
+</html>
