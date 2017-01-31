@@ -47,7 +47,7 @@ public class SupplierServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		List<Item> items;
-		String name = request.getParameter("name");
+		String name = request.getParameter("searchName");
 		if (name != null && !name.trim().isEmpty()) {
 			items = findByName(name);
 		} else {
@@ -64,7 +64,75 @@ public class SupplierServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		add(request);
+	}
 
+	@Override
+	protected void doPut(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		update(request);
+	}
+
+	@Override
+	protected void doDelete(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		delete(request);
+	}
+
+	private void add(HttpServletRequest request) {
+		String name = request.getParameter("name");
+		String quantityStr = request.getParameter("quantity");
+		String priceStr = request.getParameter("price");
+
+		if (validate(name, quantityStr, priceStr)) {
+			try {
+				int quantity = Integer.parseInt(quantityStr);
+				double price = Double.parseDouble(priceStr);
+				Item item = new Item(name, quantity, price, DEFAULT_SUPPLIER_ID);
+				idao.add(item);
+			} catch (NumberFormatException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	private boolean validate(String name, String quantityStr, String priceStr) {
+		return name != null && !name.trim().isEmpty() && quantityStr != null && !quantityStr.trim().isEmpty()
+				&& priceStr != null && !priceStr.trim().isEmpty();
+	}
+
+	private void update(HttpServletRequest request) {
+		String idStr = request.getParameter("id");
+		String name = request.getParameter("name");
+		String quantityStr = request.getParameter("quantity");
+		String priceStr = request.getParameter("price");
+
+		if (idStr != null && !idStr.trim().isEmpty() && validate(name, quantityStr, priceStr)) {
+			try {
+				long id = Long.parseLong(idStr);
+				int quantity = Integer.parseInt(quantityStr);
+				double price = Double.parseDouble(priceStr);
+				Item item = idao.getById(id);
+				item.setName(name);
+				item.setQuantity(quantity);
+				item.setPrice(price);
+				idao.update(item);
+			} catch (NumberFormatException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	private void delete(HttpServletRequest request) {
+		String idStr = request.getParameter("toRemove");
+		if (idStr != null && !idStr.trim().isEmpty()) {
+			try {
+				long id = Long.parseLong(idStr);
+				idao.remove(id);
+			} catch (NumberFormatException ex) {
+				ex.printStackTrace();
+			}
+		}
 	}
 
 	private List<Item> getAllItems() {
