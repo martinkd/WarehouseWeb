@@ -29,9 +29,9 @@ public class ItemDao {
 
 	@SuppressWarnings("unchecked")
 	public List<Item> findByName(String name, long supplierId) {
-		Query query = em.createQuery("SELECT i FROM Item i WHERE i.name LIKE :name AND i.supplierId = :supplierId",
+		Query query = em.createQuery("SELECT i FROM Item i WHERE UPPER(i.name) LIKE :name AND i.supplierId = :supplierId",
 				Item.class);
-		query.setParameter("name", "%" + name + "%");
+		query.setParameter("name", "%" + name.toUpperCase() + "%");
 		query.setParameter("supplierId", supplierId);
 		return query.getResultList();
 	}
@@ -68,8 +68,8 @@ public class ItemDao {
 
 	@SuppressWarnings("unchecked")
 	public List<Item> findAllItemsByName(String name) {
-		Query query = em.createQuery("SELECT i FROM Item i WHERE i.name LIKE :name", Item.class);
-		query.setParameter("name", "%" + name + "%");
+		Query query = em.createQuery("SELECT i FROM Item i WHERE UPPER(i.name) LIKE :name", Item.class);
+		query.setParameter("name", "%" + name.toUpperCase() + "%");
 		return query.getResultList();
 	}
 }
