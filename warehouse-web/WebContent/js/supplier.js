@@ -47,14 +47,16 @@ app.controller('ctrl1', function($scope, $http) {
 			url : 'supplier',
 			method : "POST",
 			params : itemData
-		}).success(function() {
-			alert("New item added");
+		}).success(function(response) {
+			if (response == "") {				
+				alert("New item added");
+				$scope.close();
+			} else {
+				alert("invalid input: " + response);				
+			}
 			$scope.getAll();
 		});
 		
-		$scope.name="";
-		$scope.quantity="";
-		$scope.price="";
 	}
 	
 	$scope.update = function(id) {
@@ -69,14 +71,16 @@ app.controller('ctrl1', function($scope, $http) {
 			url : 'supplier',
 			method : "PUT",
 			params : itemData
-		}).success(function() {
-			alert("Updated");
+		}).success(function(response) {
+			if (response == "") {				
+				alert("Item Updated");
+				$scope.close();
+			} else {
+				alert("invalid input: " + response);				
+			}
 			$scope.getAll();
 		});
 		
-		$scope.name="";
-		$scope.quantity="";
-		$scope.price="";
 	}
 
 	$scope.remove = function(item) {
@@ -91,6 +95,13 @@ app.controller('ctrl1', function($scope, $http) {
 			alert("Item deleted");
 			$scope.getAll();
 		});
+	}
+	
+	$scope.close = function() {
+		$scope.editForm = false;
+		$scope.name="";
+		$scope.quantity="";
+		$scope.price="";
 	}
 
 });

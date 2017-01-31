@@ -64,13 +64,13 @@ public class SupplierServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		add(request);
+		add(request, response);
 	}
 
 	@Override
 	protected void doPut(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		update(request);
+		update(request, response);
 	}
 
 	@Override
@@ -79,7 +79,7 @@ public class SupplierServlet extends HttpServlet {
 		delete(request);
 	}
 
-	private void add(HttpServletRequest request) {
+	private void add(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		String name = request.getParameter("name");
 		String quantityStr = request.getParameter("quantity");
 		String priceStr = request.getParameter("price");
@@ -91,7 +91,7 @@ public class SupplierServlet extends HttpServlet {
 				Item item = new Item(name, quantity, price, DEFAULT_SUPPLIER_ID);
 				idao.add(item);
 			} catch (NumberFormatException e) {
-				e.printStackTrace();
+				response.getWriter().write(e.getMessage());
 			}
 		}
 	}
@@ -101,7 +101,7 @@ public class SupplierServlet extends HttpServlet {
 				&& priceStr != null && !priceStr.trim().isEmpty();
 	}
 
-	private void update(HttpServletRequest request) {
+	private void update(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		String idStr = request.getParameter("id");
 		String name = request.getParameter("name");
 		String quantityStr = request.getParameter("quantity");
@@ -118,7 +118,7 @@ public class SupplierServlet extends HttpServlet {
 				item.setPrice(price);
 				idao.update(item);
 			} catch (NumberFormatException e) {
-				e.printStackTrace();
+				response.getWriter().write(e.getMessage());
 			}
 		}
 	}
