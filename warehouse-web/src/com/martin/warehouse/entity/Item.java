@@ -20,11 +20,11 @@ public class Item implements Serializable{
 	private String name;
 	private Integer quantity;
 	private Double price;
-	private Long supplierId;
+	private String supplierId;
 	
 	public Item() {};
 	
-	public Item(String name, int quantity, double price, long supplierId) {
+	public Item(String name, int quantity, double price, String supplierId) {
 		this.name = name;
 		this.quantity = quantity;
 		this.price = price;
@@ -59,10 +59,10 @@ public class Item implements Serializable{
 	public void setPrice(double price) {
 		this.price = price;
 	}
-	public long getSupplierId() {
+	public String getSupplierId() {
 		return supplierId;
 	}
-	public void setSupplierId(long supplierId) {
+	public void setSupplierId(String supplierId) {
 		this.supplierId = supplierId;
 	}
 	@Override

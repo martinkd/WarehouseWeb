@@ -36,7 +36,7 @@ public class WarehouseItemDao {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<Item> findBySupplier(long supplierId) {
+	public List<Item> findBySupplier(String supplierId) {
 		Query query = em.createQuery("SELECT i FROM WarehouseItem i WHERE  i.supplierId = :supplierId", WarehouseItem.class);
 		query.setParameter("supplierId", supplierId);
 		return query.getResultList();

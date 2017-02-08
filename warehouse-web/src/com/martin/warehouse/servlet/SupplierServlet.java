@@ -19,7 +19,7 @@ import com.martin.warehouse.entity.Item;
 @WebServlet("/supplier")
 public class SupplierServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private static final long DEFAULT_SUPPLIER_ID = 1L;
+	private static final String DEFAULT_SUPPLIER_ID = "1";
 	private ItemDao idao;
 
 	/**

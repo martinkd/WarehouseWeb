@@ -14,6 +14,8 @@
 
 <body class="bg-info" data-ng-app="app1">
 	<div data-ng-controller="ctrl1">
+		<button class="btn btn-primary btn-lg" data-ng-click="logOut()">Log out</button>
+		
 		<div class="btn pull-right">
 			<input type="text" placeholder="enter name" data-ng-model="searchName" />
 			<button class="btn btn-primary btn-sm" data-ng-click="search(searchName)"><span class="glyphicon glyphicon-search"></span> Search</button>		
