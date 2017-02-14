@@ -31,11 +31,11 @@
       <role-name>Supplier</role-name>
     </auth-constraint>
   </security-constraint>
+    <security-role>
+        <description>All SAP HANA Cloud Platform users</description>
+        <role-name>Supplier</role-name>
+    </security-role>
   <login-config>
     <auth-method>FORM</auth-method>
-    <form-login-config>
-      <form-login-page>/login.html</form-login-page>
-      <form-error-page>/error.html</form-error-page>
-    </form-login-config>
   </login-config>
 </web-app>

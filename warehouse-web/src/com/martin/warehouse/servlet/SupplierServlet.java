@@ -19,7 +19,7 @@ import com.martin.warehouse.entity.Item;
 @WebServlet("/supplier")
 public class SupplierServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private static final String DEFAULT_SUPPLIER_ID = "1";
+	private static final String DEFAULT_SUPPLIER_ID = "P1942330348";
 	private ItemDao idao;
 
 	/**
@@ -34,7 +34,7 @@ public class SupplierServlet extends HttpServlet {
 		idao = new ItemDao();
 		Item item1 = new Item("samsung", 1, 100, DEFAULT_SUPPLIER_ID);
 		Item item2 = new Item("letv", 1, 100, DEFAULT_SUPPLIER_ID);
-		Item item3 = new Item("iphone", 1, 100, DEFAULT_SUPPLIER_ID);
+		Item item3 = new Item("iphone", 1, 100, "other supplier");
 		idao.add(item1);
 		idao.add(item2);
 		idao.add(item3);
@@ -49,9 +49,9 @@ public class SupplierServlet extends HttpServlet {
 		List<Item> items;
 		String name = request.getParameter("searchName");
 		if (name != null && !name.trim().isEmpty()) {
-			items = findByName(name);
+			items = findByName(name, getSupplierId(request));
 		} else {
-			items = getAllItems();
+			items = getAllItems(request);
 		}
 		String jsonItems = new Gson().toJson(items);
 		response.setContentType("application/json;charset=UTF-8");
@@ -88,10 +88,12 @@ public class SupplierServlet extends HttpServlet {
 			try {
 				int quantity = Integer.parseInt(quantityStr);
 				double price = Double.parseDouble(priceStr);
-				Item item = new Item(name, quantity, price, DEFAULT_SUPPLIER_ID);
+				Item item = new Item(name, quantity, price, getSupplierId(request));
 				idao.add(item);
 			} catch (NumberFormatException e) {
 				response.getWriter().write(e.getMessage());
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 	}
@@ -135,12 +137,16 @@ public class SupplierServlet extends HttpServlet {
 		}
 	}
 
-	private List<Item> getAllItems() {
-		return idao.getAllItems();
+	private List<Item> getAllItems(HttpServletRequest request) {
+		return idao.getAllItemsFromSupplier(getSupplierId(request));
 	}
 
-	private List<Item> findByName(String name) {
-		return idao.findAllItemsByName(name);
+	private List<Item> findByName(String name, String supplierId) {
+		return idao.findByName(name, supplierId);
+	}
+	
+	private String getSupplierId(HttpServletRequest request) {
+		return request.getUserPrincipal().getName();
 	}
 
 }

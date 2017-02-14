@@ -3,9 +3,9 @@ var app = angular.module('app1', []);
 app.controller('ctrl1', function($scope, $http) {
 	
 	$scope.logOut = function() {
-		$http.get('logout').success(function(response) {
-			alert('logged out');
-		});
+		$http.get('logout').success(function() {
+			location.reload();
+		});	
 	}
 	
 	$scope.getAll = function() {
