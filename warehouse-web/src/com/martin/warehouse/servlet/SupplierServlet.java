@@ -20,13 +20,13 @@ import com.martin.warehouse.entity.Item;
 public class SupplierServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static final String DEFAULT_SUPPLIER_ID = "P1942330348";
+	private static final String OTHER_SUPPLIER_ID = "otherSup123";
 	private ItemDao idao;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
 	public SupplierServlet() {
-		super();
 	}
 
 	@Override
@@ -34,7 +34,7 @@ public class SupplierServlet extends HttpServlet {
 		idao = new ItemDao();
 		Item item1 = new Item("samsung", 1, 100, DEFAULT_SUPPLIER_ID);
 		Item item2 = new Item("letv", 1, 100, DEFAULT_SUPPLIER_ID);
-		Item item3 = new Item("iphone", 1, 100, "other supplier");
+		Item item3 = new Item("iphone", 1, 100, OTHER_SUPPLIER_ID);
 		idao.add(item1);
 		idao.add(item2);
 		idao.add(item3);
@@ -92,8 +92,6 @@ public class SupplierServlet extends HttpServlet {
 				idao.add(item);
 			} catch (NumberFormatException e) {
 				response.getWriter().write(e.getMessage());
-			} catch (Exception e) {
-				e.printStackTrace();
 			}
 		}
 	}

@@ -7,9 +7,6 @@ import javax.persistence.NamedQuery;
 @NamedQuery(name = "allWarehouseItems", query = "SELECT i FROM WarehouseItem i")
 public class WarehouseItem extends Item {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private Double profitRate;
 

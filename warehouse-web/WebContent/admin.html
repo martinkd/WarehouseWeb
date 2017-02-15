@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Admin View</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" type="text/css"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.8/angular.min.js"></script>
+<script src="js/suppliers.js"></script>
+</head>
+
+<body class="bg-info" data-ng-app="app2">
+	<div data-ng-controller="ctrl2">
+		<button class="btn btn-primary btn-lg" data-ng-click="logOut()">Log
+			out</button>
+
+		<div class="btn pull-right">
+			<input type="text" placeholder="enter name"
+				data-ng-model="searchName" />
+			<button class="btn btn-primary btn-sm"
+				data-ng-click="searchAllISuppliersItems(searchName)">
+				<span class="glyphicon glyphicon-search"></span> Search From All
+				Suppliers
+			</button>
+			<button class="btn btn-primary btn-sm"
+				data-ng-click="getAllSuppliersItems()">Show All Suppliers
+				Items</button>
+		</div>
+		
+		<br />
+
+		<table class="table table-striped table-hover" border="1">
+			<thead>
+				<tr>
+					<th>Id</th>
+					<th>Name</th>
+					<th>Quantity</th>
+					<th>Price</th>
+					<th>SupplierId</th>
+					<th colspan="2">Action</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr data-ng-repeat="item in items | orderBy: 'name'">
+					<td>{{item.id}}</td>
+					<td>{{item.name}}</td>
+					<td>{{item.quantity}}</td>
+					<td>{{item.price | currency}}</td>
+					<td>{{item.supplierId}}</td>
+					<td><input type="text" placeholder="quantity" data-ng-model="quantity"/></td>
+					<td><button class="btn btn-primary btn-sm" data-ng-click="order(item)" >
+					<span class="glyphicon glyphicon-briefcase"></span> Order</button></td>
+				</tr>
+			</tbody>
+		</table>
+
+	</div>
+
+</body>
+</html>

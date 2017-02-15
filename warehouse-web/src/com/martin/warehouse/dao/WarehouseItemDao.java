@@ -53,9 +53,9 @@ public class WarehouseItemDao {
 		tx.commit();
 	}
 	
-	public void remove(WarehouseItem item) {
+	public void remove(long id) {
 		EntityTransaction tx = em.getTransaction();
-		WarehouseItem found = getById(item.getId());
+		WarehouseItem found = getById(id);
 		tx.begin();
 		em.remove(found);
 		tx.commit();
