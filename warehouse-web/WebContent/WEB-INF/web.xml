@@ -22,7 +22,7 @@
       <role-name>Supplier</role-name>
     </auth-constraint>
   </security-constraint>
-  <security-constraint>
+ <security-constraint>
     <web-resource-collection>
       <web-resource-name>Protected Area</web-resource-name>
       <url-pattern>/supplier</url-pattern>
@@ -31,6 +31,7 @@
       <role-name>Supplier</role-name>
     </auth-constraint>
   </security-constraint>
+ 
   <security-role>
     <description>All SAP HANA Cloud Platform users</description>
     <role-name>Supplier</role-name>

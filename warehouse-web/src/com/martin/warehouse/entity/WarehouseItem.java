@@ -5,14 +5,13 @@ import javax.persistence.NamedQuery;
 
 @Entity
 @NamedQuery(name = "allWarehouseItems", query = "SELECT i FROM WarehouseItem i")
-public class WarehouseItem extends Item {
+public class WarehouseItem extends ItemBase {
 
-	private static final long serialVersionUID = 1L;
 	private Double profitRate;
 
 	public WarehouseItem() {
 	}
-
+	
 	public WarehouseItem(Item item) {
 		super(item);
 	}

@@ -11,7 +11,7 @@ import com.martin.warehouse.entity.WarehouseItem;
 
 public class WarehouseItemDao {
 
-	EntityManager em;
+	private EntityManager em;
 
 	public WarehouseItemDao() {
 		em = EntityManagerProvider.getInstance().getEntityManager();

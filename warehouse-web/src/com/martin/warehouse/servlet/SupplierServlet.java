@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.gson.Gson;
 import com.martin.warehouse.dao.ItemDao;
 import com.martin.warehouse.entity.Item;
+import com.martin.warehouse.entity.WarehouseItem;
 
 /**
  * Servlet implementation class SupplierServlet
@@ -19,7 +20,7 @@ import com.martin.warehouse.entity.Item;
 @WebServlet("/supplier")
 public class SupplierServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private static final String DEFAULT_SUPPLIER_ID = "P1942330348";
+	private static final String DEFAULT_SUPPLIER_ID = "john";
 	private static final String OTHER_SUPPLIER_ID = "otherSup123";
 	private ItemDao idao;
 
@@ -93,6 +94,8 @@ public class SupplierServlet extends HttpServlet {
 			} catch (NumberFormatException e) {
 				response.getWriter().write(e.getMessage());
 			}
+		} else {
+			response.getWriter().write("there is empty field(s)");
 		}
 	}
 

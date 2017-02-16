@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
-import com.martin.warehouse.dao.ItemDao;
 import com.martin.warehouse.dao.WarehouseItemDao;
 import com.martin.warehouse.entity.Item;
 import com.martin.warehouse.entity.WarehouseItem;
@@ -21,17 +20,24 @@ import com.martin.warehouse.entity.WarehouseItem;
 @WebServlet("/warehouse")
 public class WarehouseServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private WarehouseItemDao widao;
-	private ItemDao idao;
+	private static final String OTHER_SUPPLIER_ID = "otherSup123";
+	private static final double DEFAULT_PROFIT_RATE = 0.20;
+	private WarehouseItemDao wdao;
 
+	/**
+	 * @see HttpServlet#HttpServlet()
+	 */
 	public WarehouseServlet() {
-		widao = new WarehouseItemDao();
-		idao = new ItemDao();
+		
 	}
 
 	@Override
 	public void init() throws ServletException {
-
+		wdao = new WarehouseItemDao();
+		Item item = new Item("test", 10, 500, OTHER_SUPPLIER_ID);
+		WarehouseItem item1 = new WarehouseItem(item);
+		item1.setProfitRate(DEFAULT_PROFIT_RATE);
+		wdao.add(item1);
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -41,7 +47,7 @@ public class WarehouseServlet extends HttpServlet {
 		if (name != null && !name.trim().isEmpty()) {
 			items = findByName(name);
 		} else {
-			items = getAllItems();
+			items = getAllItems(request);
 		}
 		String jsonItems = new Gson().toJson(items);
 		response.setContentType("application/json;charset=UTF-8");
@@ -50,7 +56,7 @@ public class WarehouseServlet extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		order(request, response);
+		add(request, response);
 	}
 
 	@Override
@@ -63,6 +69,27 @@ public class WarehouseServlet extends HttpServlet {
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		delete(request);
+	}
+
+	private void add(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		String name = request.getParameter("name");
+		String quantityStr = request.getParameter("quantity");
+		String priceStr = request.getParameter("price");
+
+		if (validate(name, quantityStr, priceStr)) {
+			try {
+				int quantity = Integer.parseInt(quantityStr);
+				double price = Double.parseDouble(priceStr);
+				Item itemToAdd = new Item(name, quantity, price, OTHER_SUPPLIER_ID);
+				WarehouseItem item = new WarehouseItem(itemToAdd);
+				item.setProfitRate(DEFAULT_PROFIT_RATE);
+				wdao.add(item);
+			} catch (NumberFormatException e) {
+				response.getWriter().write(e.getMessage());
+			}
+		} else {
+			response.getWriter().write("there is empty field(s)");
+		}
 	}
 
 	private boolean validate(String name, String quantityStr, String priceStr) {
@@ -81,11 +108,11 @@ public class WarehouseServlet extends HttpServlet {
 				long id = Long.parseLong(idStr);
 				int quantity = Integer.parseInt(quantityStr);
 				double price = Double.parseDouble(priceStr);
-				WarehouseItem item = widao.getById(id);
+				WarehouseItem item = wdao.getById(id);
 				item.setName(name);
 				item.setQuantity(quantity);
 				item.setPrice(price);
-				idao.update(item);
+				wdao.update(item);
 			} catch (NumberFormatException e) {
 				response.getWriter().write(e.getMessage());
 			}
@@ -97,43 +124,22 @@ public class WarehouseServlet extends HttpServlet {
 		if (idStr != null && !idStr.trim().isEmpty()) {
 			try {
 				long id = Long.parseLong(idStr);
-				idao.remove(id);
+				wdao.remove(id);
 			} catch (NumberFormatException ex) {
 				ex.printStackTrace();
 			}
 		}
 	}
 
-	private void order(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		String idStr = request.getParameter("id");
-		String quantityStr = request.getParameter("quantity");
-		if (idStr != null && !idStr.trim().isEmpty() && quantityStr != null && !quantityStr.trim().isEmpty()) {
-			try {
-				long id = Long.parseLong(idStr);
-				int quantity = Integer.parseInt(quantityStr);
-				Item item = idao.getById(id);
-				if (quantity != 0 && quantity <= item.getQuantity()) {
-					WarehouseItem wItem = new WarehouseItem(item);
-					wItem.setQuantity(quantity);
-				} else {
-					response.getWriter().write("not enough quantity");
-				}
-			} catch (NumberFormatException e) {
-				response.getWriter().write(e.getMessage());
-			}
-		}
-	}
-
-	private List<WarehouseItem> getAllItems() {
-		return widao.getAllItems();
+	private List<WarehouseItem> getAllItems(HttpServletRequest request) {
+		return wdao.getAllItems();
 	}
 
 	private List<WarehouseItem> findByName(String name) {
-		return widao.findByName(name);
+		return wdao.findByName(name);
 	}
-
+	
 	private String getSupplierId(HttpServletRequest request) {
 		return request.getUserPrincipal().getName();
 	}
-
 }
